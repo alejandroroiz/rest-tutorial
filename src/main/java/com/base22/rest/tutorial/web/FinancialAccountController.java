@@ -11,36 +11,39 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
 public class FinancialAccountController {
 
-    private FinancialAccountService financialAccountService;
+    private FinancialAccountService service;
 
-
-    public FinancialAccountController(FinancialAccountService financialAccountService) {
-        this.financialAccountService = financialAccountService;
+    @Autowired
+    public FinancialAccountController(FinancialAccountService service) {
+        this.service = service;
     }
 
+    // CREATE
     @PostMapping(path="/add") // Map ONLY POST Requests
     public @ResponseBody String addNewUser (@RequestParam String name
             , @RequestParam String description, @RequestParam long balance) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
 
-        financialAccountService.generate(name, description, balance);
+        service.generate(name, description, balance);
         return "Saved";
     }
 
+    // READ
     @GetMapping(path="/all")
     public @ResponseBody Iterable<FinancialAccount> getAllUsers() {
-        return financialAccountService.getAllAccounts();
+        return service.getAllAccounts();
     }
 
+    // UPDATE
     @PutMapping(path="/update")
     public @ResponseBody String updateAccountBalance(@RequestParam Integer id, @RequestParam long balance) {
-        FinancialAccount financialAccount = financialAccountService.getAccount( id );
+        FinancialAccount financialAccount = service.getAccount( id );
 
         if (financialAccount != null) {
             financialAccount.setBalance( balance );
 
-            return financialAccountService.saveAccount( financialAccount ).toString();
+            return service.saveAccount( financialAccount ).toString();
         } else {
             return "FinancialAccount could not be found with that id";
         }
