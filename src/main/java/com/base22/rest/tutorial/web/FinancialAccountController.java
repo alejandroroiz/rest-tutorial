@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-@Controller // This means that this class is a Controller
+@RestController // This means that this class is a Controller
 @RequestMapping(path="/demo") // This means URL's start with /demo (after Application path)
 public class FinancialAccountController {
 
@@ -36,6 +36,7 @@ public class FinancialAccountController {
     }
 
     // UPDATE
+    // AHORITA SOLO UPDATEA BALANCE HAY QUE CAMBAIR ESO
     @PutMapping(path="/update")
     public @ResponseBody String updateAccountBalance(@RequestParam Integer id, @RequestParam long balance) {
         FinancialAccount financialAccount = service.getAccount( id );

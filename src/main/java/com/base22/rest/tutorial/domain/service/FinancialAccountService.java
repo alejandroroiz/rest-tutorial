@@ -2,6 +2,7 @@ package com.base22.rest.tutorial.domain.service;
 
 import com.base22.rest.tutorial.domain.model.jpa.FinancialAccount;
 import com.base22.rest.tutorial.domain.repository.jpa.FinancialAccountRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -9,6 +10,7 @@ public class FinancialAccountService {
 
     final FinancialAccountRepository repository;
 
+    @Autowired
     public FinancialAccountService(FinancialAccountRepository repository) {
         this.repository = repository;
     }
