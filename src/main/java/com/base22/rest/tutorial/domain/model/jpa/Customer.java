@@ -6,14 +6,18 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
-public class FinancialAccount {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String description;
-    private long balance;
+    private String email;
+    private String username;
+    private String password;
+    private Date dob;
 }
