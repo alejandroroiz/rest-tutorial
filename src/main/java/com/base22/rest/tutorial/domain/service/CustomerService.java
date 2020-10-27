@@ -1,11 +1,13 @@
 package com.base22.rest.tutorial.domain.service;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
+import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class CustomerService {
@@ -18,26 +20,20 @@ public class CustomerService {
     }
 
     // Create a new Customer
-    public Customer generate(String name, String email, String username, String password, Date dob) {
+    public Customer generate(String name, String email, String username, String password) {
 
-        Customer customer = new Customer();
-
-        customer.setName(name);
-        customer.setEmail(email);
-        customer.setUsername(username);
-        customer.setPassword(password);
-        customer.setDob(dob);
+        Customer customer = new Customer(name, email, username, password);
 
         return repository.save(customer);
     }
 
     // Get a Customer by Id
-    public Customer getCustomer(Integer id) {
-        return repository.findById( id ).orElse( null );
+    public Customer getCustomerById(Long id) {
+        return repository.findById( id ).orElseThrow( () -> new CustomerNotFoundException( id ) );
     }
 
     // Get all Customers
-    public Iterable<Customer> getAllCustomers() {
+    public List<Customer> getAllCustomers() {
         return repository.findAll();
     }
 
@@ -45,5 +41,21 @@ public class CustomerService {
     // Typically used after updates
     public Customer saveCustomer(Customer customer) {
         return repository.save(customer);
+    }
+
+    // Delete all Customers
+    public void deleteAllCustomers() {
+        repository.deleteAll();
+    }
+
+    // Delete a customer by Id
+    public Customer deleteCustomerById(Long id) {
+        Customer customer = getCustomerById( id );
+        if (customer != null) {
+            repository.deleteById( id );
+            return customer;
+        } else {
+            throw new CustomerNotFoundException( id );
+        }
     }
 }

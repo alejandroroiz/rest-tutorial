@@ -1,14 +1,12 @@
 package com.base22.rest.tutorial.web;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
+import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
 import com.base22.rest.tutorial.domain.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 @RestController // This means that this class is a Controller
 @RequestMapping(path="/v1") // This means URL's start with /v1 (after Application path)
@@ -21,42 +19,64 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    // CREATE
-    @PostMapping(path="/customers") // Map ONLY POST Requests
-    public @ResponseBody String addCustomer (@RequestParam String name, @RequestParam String email,
-        @RequestParam String username, @RequestParam String password,  @RequestParam String dob) throws ParseException {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        Date dateOfBirth = formatter.parse( dob );
-
-        customerService.generate(name, email, username, password, dateOfBirth);
-        return "Saved";
-    }
-
-    // READ
+    // READ ALL
     @GetMapping(path="/customers")
-    public @ResponseBody Iterable<Customer> getAllCustomers() {
+    // Returns an iterable object of Customers provided by the Service
+    public @ResponseBody List<Customer> getAllCustomers() {
         return customerService.getAllCustomers();
     }
 
-    // UPDATE
-    @PutMapping(path="/customers/{customer-id}")
-    public @ResponseBody String updateCustomer(@RequestParam Integer id, @RequestParam String name,
-       @RequestParam String email, @RequestParam String username, @RequestParam String password, @RequestParam Date dob) {
-        Customer customer = customerService.getCustomer( id );
+    // CREATE
+    @PostMapping(path="/customers") // Map ONLY POST Requests
+    public @ResponseBody Customer createNewCustomer (@RequestBody Customer customer) {
+        // @ResponseBody means the returned String is the response, not a view name
+        // @RequestParam means it is a parameter from the GET or POST request
+
+        return customerService.generate(
+            customer.getName(), customer.getEmail(), customer.getUsername(),
+            customer.getPassword());
+
+    }
+
+
+    // DELETE ALL
+    @DeleteMapping(path="/customers") // Maps to DELETE Requests
+    public void deleteAllCustomers() {
+        // Add some type of validation maybe?
+        customerService.deleteAllCustomers();
+    }
+
+    // READ ONE
+    @GetMapping(path="/customers/{customerId}")
+    public @ResponseBody Customer getCustomerById(
+     @PathVariable("customerId") Long customerId) throws CustomerNotFoundException {
+        return customerService.getCustomerById(customerId);
+    }
+
+    // UPDATE ONE
+    @PutMapping(path="/customers/{customerId}")
+    public @ResponseBody Customer updateCustomerById(
+        @PathVariable("customerId") Long customerId, @RequestBody Customer newCustomerData) throws CustomerNotFoundException {
+        Customer customer = customerService.getCustomerById( customerId );
 
         if (customer != null) {
-            customer.setName( name );
-            customer.setEmail( email );
-            customer.setUsername( username );
-            customer.setPassword( password );
-            customer.setDob( dob );
 
-            return customerService.saveCustomer(customer).toString();
+            customer.setName( newCustomerData.getName() );
+            customer.setEmail( newCustomerData.getEmail() );
+            customer.setUsername( newCustomerData.getUsername() );
+            customer.setPassword( newCustomerData.getPassword() );
+
+            return customerService.saveCustomer(customer);
         } else {
-            return "FinancialAccount could not be found with that id";
+            throw new CustomerNotFoundException(customerId);
         }
+    }
+
+    // DELETE ONE
+    @DeleteMapping(path="/customers/{customerId}")
+    public @ResponseBody Customer deleteCustomerById(
+     @PathVariable("customerId") Long customerId) throws CustomerNotFoundException {
+
+        return customerService.deleteCustomerById( customerId );
     }
 }

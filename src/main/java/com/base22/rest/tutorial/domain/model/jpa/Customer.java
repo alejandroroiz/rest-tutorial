@@ -6,18 +6,22 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
 
-import java.util.Date;
-
 @Entity
 @Data
 public class Customer {
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id;
+    private Long id;
     private String name;
     private String email;
     private String username;
     private String password;
-    private Date dob;
+
+    public Customer(String name, String email, String username, String password )  {
+        this.name = name;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+    }
 }

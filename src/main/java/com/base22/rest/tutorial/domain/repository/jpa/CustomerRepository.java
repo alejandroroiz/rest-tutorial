@@ -1,6 +1,7 @@
 package com.base22.rest.tutorial.domain.repository.jpa;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.CrudRepository;
 
 // This will be AUTO IMPLEMENTED by Spring into a Bean called customerRepository
@@ -8,7 +9,7 @@ import org.springframework.data.repository.CrudRepository;
 
 // The CrudRepository<> is taking the Class and the type of the primary key,
 // so it knows which class its going to index and how
-public interface CustomerRepository extends CrudRepository<Customer, Integer> {
+public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // Auto implemented functions:
     // save
     // saveAll
