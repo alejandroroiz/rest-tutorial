@@ -18,6 +18,8 @@ public class Customer {
     private String username;
     private String password;
 
+    public Customer() {}
+
     public Customer(String name, String email, String username, String password )  {
         this.name = name;
         this.email = email;
