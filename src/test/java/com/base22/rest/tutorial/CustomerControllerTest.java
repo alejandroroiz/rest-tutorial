@@ -9,6 +9,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.mockito.Mockito.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -46,7 +49,17 @@ public class CustomerControllerTest {
 
     @Test
     public void testGetAllCustomers() {
+        Customer c1 = new Customer("Test", "test@test.com", "test", "Test123");
+        Customer c2 = new Customer("Test2", "test2@test.com", "test2", "Test1234");
+        List<Customer> c3 = Arrays.asList(c1, c2);
 
+        when(customerService.getAllCustomers()).thenReturn(c3);
+
+        List<Customer> customers = customerController.getAllCustomers();
+
+        verify(customerService).getAllCustomers();
+
+        assertThat(customers, is(c3));
     }
 
     @Test
