@@ -1,16 +1,17 @@
 package com.base22.rest.tutorial.domain.model.jpa;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Customer {
 
   @Id
@@ -22,16 +23,15 @@ public class Customer {
 
   @NotEmpty
   @Email
+  @Column(unique = true )
   private String email;
 
   @NotEmpty
+  @Column(unique = true )
   private String username;
 
   @NotEmpty
   private String password;
-
-  public Customer() {
-  }
 
   public Customer(String name, String email, String username, String password) {
     this.name = name;

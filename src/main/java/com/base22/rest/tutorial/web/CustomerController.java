@@ -21,7 +21,7 @@ public class CustomerController {
 
   // READ ALL
   @GetMapping(path = "/customers")
-  // Returns an iterable object of Customers provided by the Service
+  // Returns a List of Customers provided by the Service
   public @ResponseBody
   List<Customer> getAllCustomers() {
     return customerService.getAllCustomers();

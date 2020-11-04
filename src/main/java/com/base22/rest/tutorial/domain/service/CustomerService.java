@@ -6,6 +6,7 @@ import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -53,6 +54,18 @@ public class CustomerService {
       return customer;
     } else {
       throw new CustomerNotFoundException(id);
+    }
+  }
+
+  // login user
+  public void login (String username, String password) {
+    Customer customer = repository.findByUsername(username);
+    if ( customer != null) {
+      if (customer.getPassword().equals(password)) {
+
+      }
+    } else {
+      throw new CustomerNotFoundException(username);
     }
   }
 }

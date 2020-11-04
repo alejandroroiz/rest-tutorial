@@ -17,4 +17,6 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
     // count
     // delete
     // exists
+
+    Customer findByUsername(String username);
 }
