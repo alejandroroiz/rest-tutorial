@@ -1,29 +1,42 @@
 package com.base22.rest.tutorial.domain.model.jpa;
 
+import lombok.Data;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.Data;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Data
 public class Customer {
 
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private String email;
-    private String username;
-    private String password;
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Long id;
 
-    public Customer() {}
+  @NotEmpty
+  private String name;
 
-    public Customer(String name, String email, String username, String password )  {
-        this.name = name;
-        this.email = email;
-        this.username = username;
-        this.password = password;
-    }
+  @NotEmpty
+  @Email
+  private String email;
+
+  @NotEmpty
+  private String username;
+
+  @NotEmpty
+  private String password;
+
+  public Customer() {
+  }
+
+  public Customer(String name, String email, String username, String password) {
+    this.name = name;
+    this.email = email;
+    this.username = username;
+    this.password = password;
+  }
 }
