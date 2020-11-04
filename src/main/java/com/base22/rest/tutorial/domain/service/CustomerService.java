@@ -3,6 +3,7 @@ package com.base22.rest.tutorial.domain.service;
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
 import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,16 +12,21 @@ import java.util.Optional;
 @Service
 public class CustomerService {
 
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
   private final CustomerRepository repository;
 
-  public CustomerService(CustomerRepository repository) {
+  public CustomerService(CustomerRepository repository, BCryptPasswordEncoder encoder) {
+    this.bCryptPasswordEncoder = encoder;
     this.repository = repository;
   }
 
   // Create a new Customer
   public Customer generate(String name, String email, String username, String password) {
 
-    Customer customer = new Customer(name, email, username, password);
+    String encodedPassword = bCryptPasswordEncoder.encode(password);
+
+    Customer customer = new Customer(name, email, username, encodedPassword);
 
     return repository.save(customer);
   }
