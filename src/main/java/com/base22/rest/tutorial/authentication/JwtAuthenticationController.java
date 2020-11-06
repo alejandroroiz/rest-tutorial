@@ -1,4 +1,4 @@
-package com.base22.rest.tutorial.configuration;
+package com.base22.rest.tutorial.authentication;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

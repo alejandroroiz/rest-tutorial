@@ -1,5 +1,7 @@
 package com.base22.rest.tutorial.configuration;
 
+import com.base22.rest.tutorial.authentication.JwtAuthenticationEntryPoint;
+import com.base22.rest.tutorial.authentication.JwtRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
