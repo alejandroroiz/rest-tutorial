@@ -62,16 +62,4 @@ public class CustomerService {
       throw new CustomerNotFoundException(id);
     }
   }
-
-  // login user
-  public void login (String username, String password) {
-    Customer customer = repository.findByUsername(username);
-    if ( customer != null) {
-      if (customer.getPassword().equals(password)) {
-
-      }
-    } else {
-      throw new CustomerNotFoundException(username);
-    }
-  }
 }

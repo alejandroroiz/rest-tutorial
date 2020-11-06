@@ -37,7 +37,7 @@ public class HelloControllerTest {
 
     // act
     MockHttpServletResponse response =
-        mvc.perform(get("/").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
+        mvc.perform(get("/hello").accept(MediaType.APPLICATION_JSON)).andReturn().getResponse();
 
     // assert
     assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
