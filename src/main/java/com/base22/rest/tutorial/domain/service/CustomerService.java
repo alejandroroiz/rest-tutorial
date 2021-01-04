@@ -3,30 +3,34 @@ package com.base22.rest.tutorial.domain.service;
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
 import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
+import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
 
   private final BCryptPasswordEncoder bCryptPasswordEncoder;
-
   private final CustomerRepository repository;
+  private final LocalDateTimeProvider localDateTimeProvider;
 
-  public CustomerService(CustomerRepository repository, BCryptPasswordEncoder encoder) {
+  public CustomerService(CustomerRepository repository, BCryptPasswordEncoder encoder,
+      LocalDateTimeProvider localDateTimeProvider) {
     this.bCryptPasswordEncoder = encoder;
     this.repository = repository;
+    this.localDateTimeProvider = localDateTimeProvider;
   }
 
   // Create a new Customer
   public Customer generate(String name, String email, String username, String password) {
 
     String encodedPassword = bCryptPasswordEncoder.encode(password);
+    LocalDateTime now = localDateTimeProvider.now();
 
-    Customer customer = new Customer(name, email, username, encodedPassword);
+    Customer customer = new Customer(name, email, username, encodedPassword, now, now);
 
     return repository.save(customer);
   }
@@ -44,6 +48,7 @@ public class CustomerService {
   // Save a Customer
   // Typically used after updates
   public Customer saveCustomer(Customer customer) {
+    customer.setLastUpdatedDate(localDateTimeProvider.now());
     return repository.save(customer);
   }
 
@@ -55,11 +60,7 @@ public class CustomerService {
   // Delete a customer by Id
   public Customer deleteCustomerById(Long id) {
     Customer customer = getCustomerById(id);
-    if (customer != null) {
-      repository.deleteById(id);
-      return customer;
-    } else {
-      throw new CustomerNotFoundException(id);
-    }
+    repository.deleteById(id);
+    return customer;
   }
 }

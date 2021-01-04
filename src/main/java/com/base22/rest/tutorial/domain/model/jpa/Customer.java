@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
@@ -33,10 +34,30 @@ public class Customer {
   @NotEmpty(message = "'password' cannot be null or empty")
   private String password;
 
-  public Customer(String name, String email, String username, String password) {
+  @Column
+  private LocalDateTime createdDate;
+
+  @Column
+  private LocalDateTime lastUpdatedDate;
+
+  public Customer(@NotEmpty(message = "'name' cannot be null or empty") String name,
+      @NotEmpty(message = "'email' cannot be null or empty") @Email(message = "Must provide a valid email") String email,
+      @NotEmpty(message = "'username' cannot be null or empty") String username,
+      @NotEmpty(message = "'password' cannot be null or empty") String password, LocalDateTime createdDate,
+      LocalDateTime lastUpdatedDate) {
     this.name = name;
     this.email = email;
     this.username = username;
     this.password = password;
+    this.createdDate = createdDate;
+    this.lastUpdatedDate = lastUpdatedDate;
+  }
+
+  public String getCreatedDate() {
+    return createdDate != null ? createdDate.toString() : null;
+  }
+
+  public String getLastUpdatedDate() {
+    return lastUpdatedDate != null ? lastUpdatedDate.toString() : null;
   }
 }
