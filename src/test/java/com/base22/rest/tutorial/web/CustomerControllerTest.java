@@ -37,7 +37,7 @@ public class CustomerControllerTest {
 
   private MockMvc mvc;
   private final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-  private final LocalDateTime now = LocalDateTime.of(2020, Month.JULY, 29, 19, 30, 40);
+  private final LocalDateTime mockedDate = LocalDateTime.of(2020, Month.JULY, 29, 19, 30, 40);
 
   @Mock
   private CustomerService customerService;
@@ -51,7 +51,7 @@ public class CustomerControllerTest {
   @BeforeEach
   public void setup() {
     //LocalDateTimeProvider will return July 29, 2020 19:30:40
-    given(localDateTimeProvider.now()).willReturn(now);
+    given(localDateTimeProvider.now()).willReturn(mockedDate);
 
     // MockMvc standalone approach
     mvc = MockMvcBuilders.standaloneSetup(customerController).build();
