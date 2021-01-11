@@ -11,15 +11,20 @@ import org.springframework.stereotype.Component;
 public class Runner implements CommandLineRunner {
 
     private static final Logger logger = LoggerFactory.getLogger(Runner.class);
+    private static final String ENVIRONMENT_JVM_PROPERTY = "REST_TUTORIAL_ENVIRONMENT";
 
     @Autowired
     private CustomerService service;
 
     @Override
     public void run(String... args) throws Exception {
-        service.deleteAllCustomers();
+        String environment = System.getenv(ENVIRONMENT_JVM_PROPERTY);
 
-        service.generate("Alex", "alex@test.com", "alejandro", "alex123");
-        service.generate("Diego", "diego@test.com", "diego", "diego123");
+        if (environment == "LOCAL") {
+            service.deleteAllCustomers();
+
+            service.generate("Alex", "alex@test.com", "alejandro", "alex123");
+            service.generate("Diego", "diego@test.com", "diego", "diego123");
+        }
     }
 }

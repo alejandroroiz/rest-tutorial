@@ -1,8 +1,6 @@
 package com.base22.rest.tutorial.domain.service;
 
-import com.base22.rest.tutorial.domain.model.jpa.Customer;
-import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
-import com.base22.rest.tutorial.domain.model.jpa.CustomerNotValidException;
+import com.base22.rest.tutorial.domain.model.jpa.*;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,26 +23,20 @@ public class CustomerService {
     this.localDateTimeProvider = localDateTimeProvider;
   }
 
-  // Check if a new customer entry already exists
-  private boolean isValid(Customer customer) {
-
-    if ( repository.existsByEmailIgnoreCase(customer.getEmail()) || repository.existsByUsernameIgnoreCase(customer.getUsername())) {
-      return false;
-    }
-    return true;
-  }
-
   // Create a new Customer
-  public Customer generate(String name, String email, String username, String password) throws CustomerNotValidException {
-    String encodedPassword = bCryptPasswordEncoder.encode(password);
-    LocalDateTime now = localDateTimeProvider.now();
-
-    Customer customer = new Customer(name, email, username, encodedPassword, now, now);
-    if (isValid(customer)) {
-      return repository.save(customer);
+  public Customer generate(String name, String email, String username, String password)
+          throws UsernameNotValidException, EmailNotValidException {
+    // Verify the username and email are not being repeated.
+    if (repository.existsByUsernameIgnoreCase(username)) {
+      throw new UsernameNotValidException(username);
+    } else if (repository.existsByEmailIgnoreCase(email)) {
+      throw new EmailNotValidException(email);
     } else {
-      // Probably might be better to separate into two different exceptions to have a clearer response message
-      throw new CustomerNotValidException(customer);
+      String encodedPassword = bCryptPasswordEncoder.encode(password);
+      LocalDateTime now = localDateTimeProvider.now();
+      Customer customer = new Customer(name, email, username, encodedPassword, now, now);
+
+      return repository.save(customer);
     }
   }
 

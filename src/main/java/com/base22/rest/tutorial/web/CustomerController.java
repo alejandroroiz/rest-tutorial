@@ -2,7 +2,6 @@ package com.base22.rest.tutorial.web;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
 import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
-import com.base22.rest.tutorial.domain.model.jpa.CustomerNotValidException;
 import com.base22.rest.tutorial.domain.service.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -45,7 +44,6 @@ public class CustomerController {
     return customerService
             .generate(customer.getName(), customer.getEmail(), customer.getUsername(), customer.getPassword());
   }
-
 
   // DELETE ALL
   @DeleteMapping(path = "/customers") // Maps to DELETE Requests
