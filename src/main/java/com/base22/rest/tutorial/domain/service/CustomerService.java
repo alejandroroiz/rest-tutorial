@@ -2,6 +2,7 @@ package com.base22.rest.tutorial.domain.service;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
 import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
+import com.base22.rest.tutorial.domain.model.jpa.CustomerNotValidException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +26,8 @@ public class CustomerService {
   }
 
   // Check if a new customer entry already exists
-  public boolean isValid(Customer customer) {
+  private boolean isValid(Customer customer) {
+
     if ( repository.existsByEmailIgnoreCase(customer.getEmail()) || repository.existsByUsernameIgnoreCase(customer.getUsername())) {
       return false;
     }
@@ -33,14 +35,17 @@ public class CustomerService {
   }
 
   // Create a new Customer
-  public Customer generate(String name, String email, String username, String password) {
-
+  public Customer generate(String name, String email, String username, String password) throws CustomerNotValidException {
     String encodedPassword = bCryptPasswordEncoder.encode(password);
     LocalDateTime now = localDateTimeProvider.now();
 
     Customer customer = new Customer(name, email, username, encodedPassword, now, now);
-
-    return repository.save(customer);
+    if (isValid(customer)) {
+      return repository.save(customer);
+    } else {
+      // Probably might be better to separate into two different exceptions to have a clearer response message
+      throw new CustomerNotValidException(customer);
+    }
   }
 
   // Get a Customer by Id

@@ -39,18 +39,11 @@ public class CustomerController {
   @ApiOperation(value = "Create a new user",
       tags = {"Customers"})
   public @ResponseBody
-  Customer createNewCustomer(@Valid @RequestBody Customer customer) throws CustomerNotValidException {
+  Customer createNewCustomer(@Valid @RequestBody Customer customer) {
     // @ResponseBody means the returned String is the response, not a view name
     // @RequestParam means it is a parameter from the GET or POST request
-    if (customerService.isValid(customer)) {
-      return customerService
-              .generate(customer.getName(), customer.getEmail(), customer.getUsername(), customer.getPassword());
-    } else {
-      // there is a better way to do this but I just could not find one
-      // the "correct" way would be to have an exception for each username not valid and email not valid
-      // so the error message is correct.
-      throw new CustomerNotValidException(customer);
-    }
+    return customerService
+            .generate(customer.getName(), customer.getEmail(), customer.getUsername(), customer.getPassword());
   }
 
 
