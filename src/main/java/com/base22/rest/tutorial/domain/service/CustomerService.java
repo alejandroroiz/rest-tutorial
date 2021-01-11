@@ -24,6 +24,14 @@ public class CustomerService {
     this.localDateTimeProvider = localDateTimeProvider;
   }
 
+  // Check if a new customer entry already exists
+  public boolean isValid(Customer customer) {
+    if ( repository.existsByEmailIgnoreCase(customer.getEmail()) || repository.existsByUsernameIgnoreCase(customer.getUsername())) {
+      return false;
+    }
+    return true;
+  }
+
   // Create a new Customer
   public Customer generate(String name, String email, String username, String password) {
 

@@ -104,9 +104,11 @@ public class CustomerControllerTest {
     Customer expectedCustomer =
         new Customer("John", "john_wick@mail.com", "JohnWick", "password", localDateTimeProvider.now(),
             localDateTimeProvider.now());
+    // this creates the entry
     given(customerService.generate("John", "john_wick@mail.com", "JohnWick", "password")).willReturn(expectedCustomer);
 
     // act
+    // when this tries to act the entry already exists so it will return a 409 conflict
     MockHttpServletResponse response = mvc.perform(post("/v1/customers/").contentType(MediaType.APPLICATION_JSON)
         .content(OBJECT_MAPPER.writeValueAsString(expectedCustomer))).andReturn().getResponse();
 
