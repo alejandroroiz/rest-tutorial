@@ -2,6 +2,7 @@ package com.base22.rest.tutorial.domain.service;
 
 import com.base22.rest.tutorial.domain.model.jpa.Customer;
 import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
+import com.base22.rest.tutorial.domain.model.jpa.UsernameNotValidException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import org.junit.jupiter.api.Assertions;
@@ -70,6 +71,23 @@ public class CustomerServiceTest {
     // assert
     assertThat(createdCustomer).isEqualTo(expectedCustomer);
 
+  }
+
+  @Test
+  @DisplayName("Given repeated parameters, service will return a 409")
+  public void given_repeated_parameters_service_will_return_a_409() {
+    //arrange
+    Customer customerOnDB =  new Customer("John", "john_wick@mail.com", "JohnWick", "passwordHash_32186461321987",
+            localDateTimeProvider.now(), localDateTimeProvider.now());
+    given(customerRepository.save(customerOnDB)).willReturn(customerOnDB);
+    given(
+      customerService.generate("Juan", "john_wick@mail.com", "JohnWick", "passwordHash_32186461321987")
+    ).willThrow(UsernameNotValidException.class);
+
+    //act & assert
+    Assertions.assertThrows(UsernameNotValidException.class, () -> {
+      customerService.generate("Juan", "john_wick@mail.com", "JohnWick", "passwordHash_32186461321987");
+    });
   }
 
   @Test
