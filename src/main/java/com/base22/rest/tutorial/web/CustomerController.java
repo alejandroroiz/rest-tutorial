@@ -25,6 +25,7 @@ public class CustomerController {
 
   // READ ALL
   @GetMapping(path = "/customers")
+  @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Returns a list of customers provided by the service",
       tags = {"Customers"})
   public @ResponseBody
@@ -47,6 +48,7 @@ public class CustomerController {
 
   // DELETE ALL
   @DeleteMapping(path = "/customers") // Maps to DELETE Requests
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ApiOperation(value = "Delete all customers",
       tags = {"Customers"})
   public void deleteAllCustomers() {
@@ -56,6 +58,7 @@ public class CustomerController {
 
   // READ ONE
   @GetMapping(path = "/customers/{customerId}")
+  @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Get a customer by id",
       tags = {"Customers"})
   public @ResponseBody
@@ -65,6 +68,7 @@ public class CustomerController {
 
   // UPDATE ONE
   @PutMapping(path = "/customers/{customerId}")
+  @ResponseStatus(HttpStatus.OK)
   @ApiOperation(value = "Update a customer by id",
       tags = {"Customers"})
   public @ResponseBody
@@ -84,6 +88,7 @@ public class CustomerController {
 
   // DELETE ONE
   @DeleteMapping(path = "/customers/{customerId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
   @ApiOperation(value = "Delete a customer by id",
       tags = {"Customers"})
   public @ResponseBody
