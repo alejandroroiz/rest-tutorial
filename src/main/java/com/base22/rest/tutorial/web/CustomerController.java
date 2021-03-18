@@ -74,15 +74,10 @@ public class CustomerController {
   public @ResponseBody
   Customer updateCustomerById(@PathVariable("customerId") Long customerId, @Valid @RequestBody Customer newCustomerData)
       throws CustomerNotFoundException {
-    Customer customer = customerService.getCustomerById(customerId);
+    // Use this line to verify if the customer exists as an exception is thrown if not found
+    customerService.getCustomerById(customerId);
 
-    //Always is going to be not null, as an exception is thrown if not found
-    customer.setName(newCustomerData.getName());
-    customer.setEmail(newCustomerData.getEmail());
-    customer.setUsername(newCustomerData.getUsername());
-    customer.setPassword(newCustomerData.getPassword());
-
-    return customerService.saveCustomer(customer);
+    return customerService.updateCustomer(customerId, newCustomerData.getName(), newCustomerData.getEmail(), newCustomerData.getUsername(), newCustomerData.getPassword());
 
   }
 

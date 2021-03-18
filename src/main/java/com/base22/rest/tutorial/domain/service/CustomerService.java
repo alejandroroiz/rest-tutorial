@@ -40,6 +40,19 @@ public class CustomerService {
     }
   }
 
+  // Update a customer
+  public Customer updateCustomer(Long customerId, String name, String email, String username, String password) {
+    Customer customer = getCustomerById( customerId );
+
+    customer.setName( name );
+    customer.setEmail( email );
+    customer.setUsername( username );
+    customer.setPassword( bCryptPasswordEncoder.encode( password ) );
+    customer.setLastUpdatedDate( localDateTimeProvider.now() );
+
+    return repository.save(customer);
+  }
+
   // Get a Customer by Id
   public Customer getCustomerById(Long id) {
     return repository.findById(id).orElseThrow(() -> new CustomerNotFoundException(id));
