@@ -1,9 +1,10 @@
-package com.cnh.portal.directoryservice.exception;
+package com.base22.rest.tutorial.exception;
 
-import com.cnh.portal.commonutils.exceptions.AppConfigException;
-import com.cnh.portal.directoryservice.Globals;
+import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
+import com.base22.rest.tutorial.domain.model.jpa.EmailNotValidException;
+import com.base22.rest.tutorial.domain.model.jpa.UsernameNotValidException;
+import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.ibm.disthub2.impl.matching.selector.ParseException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpHeaders;
@@ -17,45 +18,33 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import javax.naming.NamingException;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   private static final Logger logger = LogManager.getLogger();
+  private final LocalDateTimeProvider localDateTimeProvider;
 
-  @ExceptionHandler({ResourceNotFoundException.class})
-  public ResponseEntity<ErrorResponse> customHandleNotFound(Exception ex, WebRequest request) {
-    this.cleanGlobalsMemory();
-    logger.info(ex.getMessage());
+  public GlobalExceptionHandler(LocalDateTimeProvider localDateTimeProvider) {
+    this.localDateTimeProvider = localDateTimeProvider;
+  }
+
+  @ExceptionHandler({CustomerNotFoundException.class})
+  public ResponseEntity<ErrorResponse> handleConfigurationException(Exception ex, WebRequest request) {
+    logger.debug(ex.getMessage());
     return this.getErrorMessage(ex, HttpStatus.NOT_FOUND);
   }
 
-  @ExceptionHandler(BadRequestException.class)
-  public ResponseEntity<ErrorResponse> customHandleBadRequest(Exception ex, WebRequest request) {
-    this.cleanGlobalsMemory();
-    logger.info(ex.getMessage());
-    return this.getErrorMessage(ex, HttpStatus.BAD_REQUEST);
+  @ExceptionHandler({EmailNotValidException.class, UsernameNotValidException.class})
+  public ResponseEntity<ErrorResponse> handleNotValidException(Exception ex, WebRequest request) {
+    logger.debug(ex.getMessage());
+    return this.getErrorMessage(ex, HttpStatus.CONFLICT);
   }
 
-  @ExceptionHandler(ForbiddenException.class)
-  public ResponseEntity<ErrorResponse> customHandleForbidden(Exception ex, WebRequest request) {
-    this.cleanGlobalsMemory();
-    logger.info(ex.getMessage());
-    return this.getErrorMessage(ex, HttpStatus.FORBIDDEN);
-  }
 
-  @ExceptionHandler(UnauthorizedException.class)
-  public ResponseEntity<ErrorResponse> customHandleUnauthorized(Exception ex, WebRequest request) {
-    this.cleanGlobalsMemory();
-    logger.info(ex.getMessage());
-    return this.getErrorMessage(ex, HttpStatus.UNAUTHORIZED);
-  }
-
-  @ExceptionHandler({IOException.class, ParseException.class, AppConfigException.class, NamingException.class,
-      JsonProcessingException.class, NullPointerException.class, Exception.class})
-  public ResponseEntity<ErrorResponse> customHandleException(Exception ex, WebRequest request) {
-    this.cleanGlobalsMemory();
+  @ExceptionHandler({IOException.class, AppConfigException.class, NamingException.class, JsonProcessingException.class,
+      NullPointerException.class, Exception.class})
+  public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex, WebRequest request) {
     logger.error("Exception: {}", ex.getLocalizedMessage());
     StackTraceElement[] stackTrace = ex.getStackTrace();
     if (stackTrace != null) {
@@ -74,17 +63,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     headers.setContentType(MediaType.APPLICATION_JSON);
 
     ErrorResponse errors = new ErrorResponse();
-    errors.setTimestamp(LocalDateTime.now());
+    errors.setTimestamp(localDateTimeProvider.now());
     errors.setMessage(ex.getMessage() != null ? ex.getMessage() : ex.getLocalizedMessage());
     errors.setResponseCode(httpStatus.value());
 
     return new ResponseEntity<>(errors, headers, httpStatus);
 
-  }
-
-  private void cleanGlobalsMemory() {
-    Globals.LOGGED_USER_ID.remove();
-    Globals.LOGGED_USER.remove();
   }
 }
 

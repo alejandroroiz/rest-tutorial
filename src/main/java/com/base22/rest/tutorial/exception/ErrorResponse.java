@@ -1,4 +1,4 @@
-package com.cnh.portal.directoryservice.exception;
+package com.base22.rest.tutorial.exception;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
