@@ -1,6 +1,9 @@
 package com.base22.rest.tutorial.domain.service;
 
-import com.base22.rest.tutorial.domain.model.jpa.*;
+import com.base22.rest.tutorial.domain.model.jpa.Customer;
+import com.base22.rest.tutorial.domain.model.jpa.CustomerNotFoundException;
+import com.base22.rest.tutorial.domain.model.jpa.EmailNotValidException;
+import com.base22.rest.tutorial.domain.model.jpa.UsernameNotValidException;
 import com.base22.rest.tutorial.domain.repository.jpa.CustomerRepository;
 import com.base22.rest.tutorial.provider.LocalDateTimeProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -24,8 +27,7 @@ public class CustomerService {
   }
 
   // Create a new Customer
-  public Customer generate(String name, String email, String username, String password)
-          throws UsernameNotValidException, EmailNotValidException {
+  public Customer generate(String name, String email, String username, String password) {
     // Verify the username and email are not being repeated.
     if (repository.existsByUsernameIgnoreCase(username)) {
       throw new UsernameNotValidException(username);
@@ -42,13 +44,13 @@ public class CustomerService {
 
   // Update a customer
   public Customer updateCustomer(Long customerId, String name, String email, String username, String password) {
-    Customer customer = getCustomerById( customerId );
+    Customer customer = getCustomerById(customerId);
 
-    customer.setName( name );
-    customer.setEmail( email );
-    customer.setUsername( username );
-    customer.setPassword( bCryptPasswordEncoder.encode( password ) );
-    customer.setLastUpdatedDate( localDateTimeProvider.now() );
+    customer.setName(name);
+    customer.setEmail(email);
+    customer.setUsername(username);
+    customer.setPassword(bCryptPasswordEncoder.encode(password));
+    customer.setLastUpdatedDate(localDateTimeProvider.now());
 
     return repository.save(customer);
   }
