@@ -2,4 +2,5 @@ database:
   url: jdbc:mysql://localhost:3306/rest_api_tutorial?serverTimezone=UTC
   username: restapiuser
   password: P@ssw0rd
+  driver: com.mysql.cj.jdbc.Driver
 
