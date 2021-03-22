@@ -1,41 +1,67 @@
-HELP.md
+# IntelliJ
+.idea/
+.idea/tasks.xml
+.idea/workspace.xml
+.idea/libraries
+
+# Maven
 target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+reports/
+test-output/
+
+# === Operating Systems ===
+# == OS X ==
+# https://github.com/github/gitignore/blob/master/Global/OSX.gitignore
 .DS_Store
-data/
+.AppleDouble
+.LSOverride
+# Icon must ends with two \r.
+Icon
 
-### STS ###
-.apt_generated
-.classpath
-.factorypath
+# Thumbnails
+._*
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# == GNU/Linux ==
+# https://github.com/github/gitignore/blob/master/Global/Linux.gitignore
+*~
+!.gitignore
+ 
+# KDE directory preferences
+.directory
+ 
+# == Windows ==
+# https://github.com/github/gitignore/blob/master/Global/Windows.gitignore
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+ 
+# Folder config file
+Desktop.ini
+ 
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+ 
+# === IDEs and editors ===
+ 
+# Eclipse
+# https://github.com/github/gitignore/blob/master/Global/Eclipse.gitignore
+*.pydevproject
 .project
-.settings
+.classpath
+.settings/
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.loadpath
+.freemarker-ide.xml
 .springBeans
-.sts4-cache
-
-### IntelliJ IDEA ###
-.idea
-*.iws
-*.iml
-*.ipr
-
-### NetBeans ###
-/nbproject/private/
-/nbbuild/
-/dist/
-/nbdist/
-/.nb-gradle/
-build/
-
-### VS Code ###
-.vscode/
-
-### MAVEN ###
-.mvn
-mvnw
-mvnw.cmd
-
-### Personal ###
-wiki-images
+/src/main/resources/rebel.xml

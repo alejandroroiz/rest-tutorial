@@ -12,7 +12,8 @@ The application follows the simple workflow of creating a user and authenticatin
 
 
 ## Documentation
-Take a look at the [documentation in Base22 wiki](https://base22.atlassian.net/wiki/spaces/~Alejandro.Roiz/pages/9601034/Learn+how+to+create+a+RESTful+Service+Using+Spring+Boot). The documentation is in a guide format which explains the technical details of the code and deep dives into the code itself.
+Take a look at the [documentation in Base22 wiki](https://base22.atlassian.net/wiki/spaces/~Alejandro.Roiz/pages/9601034/Learn+how+to+create+a+RESTful+Service+Using+Spring+Boot). 
+The documentation is in a guide format which explains the technical details of the solution and deep dives into the code itself.
 
 
 ## Contributing
