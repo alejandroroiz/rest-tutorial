@@ -1,6 +1,14 @@
 # [Base22 Spring Rest API Tutorial](https://base22.atlassian.net/wiki/spaces/~Alejandro.Roiz/pages/9601034/Learn+how+to+create+a+RESTful+Service+Using+Spring+Boot)
 The Rest API Tutorial is an effort realized by Alejandro Roiz and Diego Contreras to aid the Backend Developer Onboarding process.
 
+## Scope
+The Rest API contains the following:
+
+- SpringBoot Concepts
+- Model Layer
+- Repository Layer
+- Service Layer
+- Controller Layer
 
 ## Quick start
 Utilize the starting configuration described on the tutorial for bootstrapping your application.
