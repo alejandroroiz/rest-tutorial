@@ -8,7 +8,7 @@ import java.time.ZoneOffset;
 @Service
 public class LocalDateTimeProvider {
 
-  public LocalDateTime now() {
-    return LocalDateTime.now(ZoneOffset.UTC);
-  }
+	public LocalDateTime now() {
+		return LocalDateTime.now(ZoneOffset.UTC);
+	}
 }

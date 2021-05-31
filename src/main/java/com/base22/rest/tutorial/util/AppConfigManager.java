@@ -12,32 +12,32 @@ import java.util.HashMap;
 
 public class AppConfigManager {
 
-  private String fileName = "";
-  private static HashMap<String, FileBasedConfigurationBuilder<FileBasedConfiguration>> builders = new HashMap();
+	private String fileName = "";
+	private static HashMap<String, FileBasedConfigurationBuilder<FileBasedConfiguration>> builders = new HashMap();
 
-  public AppConfigManager() {
-  }
+	public AppConfigManager() {
+	}
 
-  private static void configure(String fileName) {
-    Parameters params = new Parameters();
-    File yamlFile = new File(fileName);
-    FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
-        (new FileBasedConfigurationBuilder(YAMLConfiguration.class))
-            .configure(params.fileBased().setFile(yamlFile).setEncoding("UTF-8"));
-    builders.put(fileName, builder);
-  }
+	private static void configure(String fileName) {
+		Parameters params = new Parameters();
+		File yamlFile = new File(fileName);
+		FileBasedConfigurationBuilder<FileBasedConfiguration> builder =
+			(new FileBasedConfigurationBuilder(YAMLConfiguration.class))
+				.configure(params.fileBased().setFile(yamlFile).setEncoding("UTF-8"));
+		builders.put(fileName, builder);
+	}
 
-  public static FileBasedConfiguration getConfiguration(String pathToFile) throws AppConfigException {
-    if (!builders.containsKey(pathToFile)) {
-      configure(pathToFile);
-    }
+	public static FileBasedConfiguration getConfiguration(String pathToFile) throws AppConfigException {
+		if (!builders.containsKey(pathToFile)) {
+			configure(pathToFile);
+		}
 
-    try {
-      return (FileBasedConfiguration) ((FileBasedConfigurationBuilder) builders.get(pathToFile)).getConfiguration();
-    } catch (NullPointerException | ConfigurationException var2) {
-      throw new AppConfigException(
-          "APPLICATION CONFIGURATION ERROR: The Application Configuration could not be retrieved from file '"
-              + pathToFile + "'\nUnderlying error: " + var2.getMessage(), var2);
-    }
-  }
+		try {
+			return (FileBasedConfiguration) ((FileBasedConfigurationBuilder) builders.get(pathToFile)).getConfiguration();
+		} catch (NullPointerException | ConfigurationException var2) {
+			throw new AppConfigException(
+				"APPLICATION CONFIGURATION ERROR: The Application Configuration could not be retrieved from file '"
+					+ pathToFile + "'\nUnderlying error: " + var2.getMessage(), var2);
+		}
+	}
 }
